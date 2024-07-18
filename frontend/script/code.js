@@ -8,7 +8,9 @@ search.addEventListener("click", () => {
   const APIKey = "e45c8a001726ea351bb3f475eef6cb09";
   const city = document.querySelector(".search-box input").value;
 
-  if (city === "") return;
+  if (city === "") {
+    return;
+  }
 
   fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`
@@ -70,5 +72,20 @@ search.addEventListener("click", () => {
       weatherBox.classList.add("fadeIn");
       weatherDetails.classList.add("fadeIn");
       container.style.height = "590px";
+
+
+      // Send data to backend
+      fetch('http://127.0.0.1:5000/save_weather_data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          city: city,
+          temperature: json.main.temp,
+          humidity: json.main.humidity,
+          weather_conditions: json.weather[0].main
+        })
+      });
     });
 });
